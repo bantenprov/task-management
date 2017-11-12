@@ -1,0 +1,31 @@
+{
+  "description": "Application to easily manage task in your team",
+  "name": "bantenprov/task-management",
+  "type": "library",
+  "homepage": "https://github.com/bantenprov/task-management",
+  "authors": [
+    {
+      "name": "bantenprov",
+      "email": "developer.bantenprov@gmail.com",
+      "role": "developer"
+    }
+  ],
+  "license": "MIT",
+  "support": {
+    "source": "https://github.com/bantenprov/task-management",
+    "issues": "https://github.com/bantenprov/task-management/issues",
+    "wiki": "https://github.com/bantenprov/task-management/wiki"
+  },
+  "require": {
+    "php": ">=5.6.4"
+  },
+  "autoload": {
+        "files": [
+            "src/helpers/helpers.php"
+        ],
+        "psr-4": {
+            "Bantenprov\\TaskManagement\\": "src"
+        }
+    },
+    "minimum-stability": "stable"
+}
