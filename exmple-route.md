@@ -344,12 +344,6 @@ Route::group(['prefix' => 'task-management','middleware' => ['auth']],function()
 
     })->name('taskManagementMemberDestroy');
 
-
-
-    
-    Route::get('/testajax/{val}/{cmid}','TaskManagementController@taskManagementCommentRatingStore')->name('ajaxTest');
-    
-
     
 });
 ```
