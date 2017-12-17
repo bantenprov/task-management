@@ -1,0 +1,104 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Validator;
+class TaskManagementController extends Controller
+{
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    public function taskManagementTaskStore(Request $req)
+    {
+
+        if(is_null($req->date)){
+            return redirect()->back()->withInput($req->all())->withErrors('Date can\'t null');
+        }
+        
+        
+        $date = explode(' - ',$req->date);
+        $req_all = $req->all();
+
+        array_forget($req_all,'date');
+        array_set($req_all,'start_date',$date[0]);
+        array_set($req_all,'end_date',$date[1]);
+         
+        return \TaskManagement::task('store',$req_all,NULL);        
+        
+        //return redirect()->back();
+    }
+
+    public function taskManagementTaskCommentStore($task_id, Request $req)
+    {        
+        return \TaskManagement::comment('store',$task_id,$req->all());        
+        
+        //return redirect()->back();
+    }
+
+    public function taskManagementTaskAddMemberStore($task_id, Request $req)
+    {
+        //dd($req->all());
+        return \TaskManagement::task('storeAddMember',$task_id,$req->all());        
+        
+        //return redirect()->back();
+    }
+
+    public function taskManagementStafStore(Request $req)
+    {                        
+        return \TaskManagement::staf('store',$req->all(),NULL);        
+    }
+
+    public function taskManagementStafUpdate($id,Request $req)
+    {                        
+        return \TaskManagement::staf('update',$id,$req->all());        
+    }
+
+    public function taskManagementProjectStore(Request $req)
+    {
+
+        if(is_null($req->date)){
+            return redirect()->back()->withInput($req->all())->withErrors('Date can\'t null');
+        }
+        
+        
+        $date = explode(' - ',$req->date);
+        $req_all = $req->all();
+
+        array_forget($req_all,'date');
+        array_set($req_all,'start_date',$date[0]);
+        array_set($req_all,'end_date',$date[1]);
+                
+        return \TaskManagement::project('store',$req_all,NULL);
+    }
+
+    public function taskManagementProjectUpdate(Request $req, $id)
+    {
+        if(is_null($req->date)){
+            return redirect()->back()->withInput($req->all())->withErrors('Date can\'t null');
+        }
+        
+        
+        $date = explode(' - ',$req->date);
+        $req_all = $req->all();
+
+        array_forget($req_all,'date');
+        array_set($req_all,'start_date',$date[0]);
+        array_set($req_all,'end_date',$date[1]);
+
+        return \TaskManagement::project('update',$id,$req_all);
+
+    }
+
+    public function taskManagementMemberStore(Request $req)
+    {
+        return \TaskManagement::member('store',$req->all(),NULL);
+    }
+
+    public function taskManagementMemberUpdate($id, Request $req)
+    {
+        return \TaskManagement::member('update',$id,$req->all());
+    }
+}
