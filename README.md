@@ -32,6 +32,15 @@ $ composer require bantenprov/task-management
         willvincent\Rateable\RateableServiceProvider::class,
 ```
 
+```php
+'aliases' => [
+        'View' => Illuminate\Support\Facades\View::class,
+        //...
+        'Form' => Collective\Html\FormFacade::class,
+        'Html' => Collective\Html\HtmlFacade::class,        
+        'TaskManagement' => Bantenprov\TaskManagement\Facades\TaskManagement::class,
+```
+
 ## Install task management
 
 ```bash
