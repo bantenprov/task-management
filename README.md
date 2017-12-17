@@ -10,7 +10,7 @@ $ composer create-project --prefer-dist laravel/laravel project_name "5.4.*"
 ## Install package
 
 ```bash
-$ composer require bantenprov/task-management
+$ composer require bantenprov/task-management:dev-master
 ```
 
 ## Edit config/app.php
