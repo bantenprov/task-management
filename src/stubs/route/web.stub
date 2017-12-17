@@ -313,6 +313,4 @@ Route::group(['prefix' => 'task-management','middleware' => ['auth']],function()
     
 });
 
-Route::get('{name?}', 'ClearController@showView');
-
 
