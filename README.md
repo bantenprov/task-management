@@ -46,3 +46,5 @@ $ composer require bantenprov/task-management
 ```bash
 $ php artisan bantenprov:task-management-install
 ```
+
+### untuk example route, bisa lihat [disini](https://github.com/bantenprov/task-management/blob/master/exmple-route.md)
