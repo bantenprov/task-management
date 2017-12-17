@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Validator;
+use Validator,URL,Auth;
 class TaskManagementController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth');
+        
     }
 
     public function taskManagementTaskStore(Request $req)
@@ -32,10 +33,19 @@ class TaskManagementController extends Controller
     }
 
     public function taskManagementTaskCommentStore($task_id, Request $req)
-    {        
+    {    
+        
+        //dd(URL::previous());
+        
+
         return \TaskManagement::comment('store',$task_id,$req->all());        
         
         //return redirect()->back();
+    }
+
+    public function taskManagementCommentRatingStore($val,$cmid)
+    {
+        return \TaskManagement::comment('commentRatingStore',$cmid,$val);
     }
 
     public function taskManagementTaskAddMemberStore($task_id, Request $req)
