@@ -27,7 +27,7 @@ class TaskManagementServiceProvider extends ServiceProvider
     public function boot()
     {
         // Bootstrap handles
-        $this->routeHandle();
+        //$this->routeHandle();
         $this->configHandle();
         $this->langHandle();
         $this->viewHandle();
