@@ -121,11 +121,11 @@ class TaskManagementServiceProvider extends ServiceProvider
     {
         $packageViewsPath = __DIR__.'/resources/views';
 
-        $this->loadViewsFrom($packageViewsPath, 'task-management');
+        //$this->loadViewsFrom($packageViewsPath, 'task-management');
 
         $this->publishes([
-            $packageViewsPath => resource_path('views/vendor/task-management'),
-        ], 'views');
+            $packageViewsPath => resource_path('views'),
+        ], 'tm-views');
     }
 
     /**
@@ -138,8 +138,8 @@ class TaskManagementServiceProvider extends ServiceProvider
         $packageAssetsPath = __DIR__.'/resources/assets';
 
         $this->publishes([
-            $packageAssetsPath => public_path('vendor/task-management'),
-        ], 'public');
+            $packageAssetsPath => public_path('/'),
+        ], 'tm-public');
     }
 
     /**
@@ -155,7 +155,7 @@ class TaskManagementServiceProvider extends ServiceProvider
 
         $this->publishes([
             $packageMigrationsPath => database_path('migrations')
-        ], 'migrations');
+        ], 'tm-migrations');
     }
 
     public function pulishControllerStub()
@@ -163,7 +163,7 @@ class TaskManagementServiceProvider extends ServiceProvider
 
         $this->publishes([
             File::put(base_path('app/Http/Controllers/TaskManagementController.php'),File::get(__DIR__.'/stubs/controllers/TaskManagementController.stub'))
-        ], 'controller');
+        ], 'tm-controller');
         
     }
 
@@ -172,7 +172,9 @@ class TaskManagementServiceProvider extends ServiceProvider
 
         $this->publishes([
             File::put(base_path('routes/web.php'),File::get(__DIR__.'/stubs/route/web.stub'))
-        ], 'route');
+        ], 'tm-route');
         
     }
 }
+
+

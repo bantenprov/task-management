@@ -45,6 +45,9 @@ $ composer require bantenprov/task-management:dev-master
 
 ```bash
 $ php artisan bantenprov:task-management-install
+$ php artisan vendor:publish --tag=tm-views
+$ php artisan vendor:publish --tag=tm-public
+$ php artisan vendor:publish --tag=tm-migrations
 ```
 
 ### untuk example route, bisa lihat [disini](https://github.com/bantenprov/task-management/blob/master/exmple-route.md)
