@@ -33,6 +33,8 @@ class TaskManagementServiceProvider extends ServiceProvider
         $this->viewHandle();
         $this->assetHandle();
         $this->migrationHandle();
+        $this->pulishControllerStub();
+        $this->pulishRouteStub();
         
     }
 
