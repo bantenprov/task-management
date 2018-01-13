@@ -11,15 +11,35 @@
 |
 */
 
-
-
 Auth::routes();
 
-Route::get('/', function () {
+Route::get('/',function(){
+
+        $countProject = TaskManagement::project('countProject',NULL,NULL);
+        $countComment = TaskManagement::comment('countComment',NULL,NULL);
+        $countStaf = TaskManagement::staf('countStaf',NULL,NULL);
+        $countMember = TaskManagement::member('countMember',NULL,NULL);
+        $countTask = TaskManagement::task('countTask',NULL,NULL);
+        $countUser = App\User::all()->count();
+                
+
+    return view('index',compact(
+            'countProject',
+            'countComment',
+            'countStaf',
+            'countMember',
+            'countTask',
+            'countUser'
+        ));
+
+})->name('index');
+
+Route::get('/admin-login', function () {
     return redirect()->route('login');
 });
 
-Route::group(['prefix' => 'task-management','middleware' => ['auth']],function(){
+
+Route::group(['prefix' => 'task-management','middleware' => ['auth','access']],function(){
     
     Route::get('/',function(){
         $countProject = TaskManagement::project('countProject',NULL,NULL);
@@ -27,20 +47,86 @@ Route::group(['prefix' => 'task-management','middleware' => ['auth']],function()
         $countStaf = TaskManagement::staf('countStaf',NULL,NULL);
         $countMember = TaskManagement::member('countMember',NULL,NULL);
         $countTask = TaskManagement::task('countTask',NULL,NULL);
+        $countUser = App\User::all()->count();
         
         return view('task-management::index',compact(
             'countProject',
             'countComment',
             'countStaf',
             'countMember',
-            'countTask'
+            'countTask',
+            'countUser'
         ));
-    })->name('TaskManagementIndex');
+    })->name('taskManagementIndex');
 
+    // opd ==========================================
+
+    Route::get('/opd', function () {
+        // $opds =  Opd::index()->paginate(10);
+        $opds =  Bantenprov\LaravelOpd\Models\LaravelOpdModel::paginate(10);
+        $title = "OPD";
+        return view('laravel-opd::unit_kerja.index',compact('opds','title'));
+    })->name('opdIndex');
+
+    Route::get('/opd/create-root',function(){
+        $title = "Add new";
+
+        return view('laravel-opd::unit_kerja.create-root',compact('title'));
+    })->name('opdCreate_root');
+
+    Route::post('/opd/create-root/store','TaskManagementController@taskManagementOpdStore')->name('opdRootStore');
+
+    Route::get('/opd/create-child',function(){
+        $unit_kerjas =  Opd::index();
+      
+        return view('laravel-opd::unit_kerja.create-child',compact('unit_kerjas','title'));
+    })->name('opdCreate_child');
+
+    Route::get('/opd/add-child/{id}', function($id){
+
+        $title = "Add child";
+
+        $unit_kerja = Bantenprov\LaravelOpd\Models\LaravelOpdModel::where('id',$id)->first();
+
+        return view('laravel-opd::unit_kerja.add-child',compact('unit_kerja','title'));
+    })->name('opdAddChild');
+
+    Route::post('/opd/add-child/{id}/store','TaskManagementController@taskManagementOpdAddChildStore')->name('opdAddChildStore');
+
+    Route::get('/opd/show/{id}',function($id){
+        $title = "OPD";
+        $unit_kerja = Bantenprov\LaravelOpd\Models\LaravelOpdModel::where('id',$id)->first();
+        $stafs = Bantenprov\Staf\Models\Staf::where('opd_id',$unit_kerja->id)->get();
+        $project = new Bantenprov\Project\Models\Project;
+
+
+        foreach($stafs as $staf){
+            $stafz = $project->where('staf_id',$staf->id)->paginate(10);
+        }
+        //dd($stafz[0]->getStaf);
+        return view('laravel-opd::unit_kerja.show',compact('title','unit_kerja','stafs','stafz','project'));
+    })->name('opdShow');
+
+
+    // User =========================================
 
     Route::get('/user','UserController@index')->name('userManagementIndex');
+    Route::get('/user/create','UserController@create')->name('userManagementCreate');
+    Route::post('/user/store','UserController@store')->name('userManagementStore');
+    Route::get('/user/{id}/view','UserController@show')->name('userManagementShow');
+    Route::get('/user/{id}/edit','UserController@edit')->name('userManagementEdit');
+    Route::post('/user/{id}/updaate','UserController@update')->name('userManagementUpdate');
+    Route::post('/user/{id}/delete','UserController@destroy')->name('userManagementDestroy');
+    Route::post('/user/{id}/user-role-store','UserController@roleUserStore')->name('userManagementRoleUserStore');
+
+    // User profile ==================================
+
+    Route::get('/user-profile','UserProfileController@index')->name('userProfileIndex');
+    Route::get('/user-profile/edit','UserProfileController@edit')->name('userProfileEdit');
+    Route::post('/user-profile/update','UserProfileController@update')->name('userProfileUpdate');
 
     // Task ==========================================
+
     Route::get('/task',function(){
         
         $title = "Task";
@@ -89,6 +175,12 @@ Route::group(['prefix' => 'task-management','middleware' => ['auth']],function()
         return view('comment::show',compact('comment','title'));
     
     })->name('taskManagementCommentShow');
+
+    Route::get('/comment/{id}/delete',function($id){
+
+        return TaskManagement::comment('destroy',$id,NULL);
+
+    })->name('taskManagementCommentDestroy');
     
     Route::get('/task/{id}/view',function($id){
         
@@ -104,8 +196,17 @@ Route::group(['prefix' => 'task-management','middleware' => ['auth']],function()
         $end = new DateTime($task->end_date);
 
         $duration = $start->diff($end); 
+        $countComment = $task->getComment->count(); 
+        //dd($countComment);
+
+        //dd($members[0]->getMember);
+        //dd($task->getComment[0]->getUser->name);
+        //dd($task->getComment[0]->user_id == Auth::user()->id);
+        $user_id = Auth::user()->id;
+        //dd($task->getComment[0]->comment_rating);
         
-        return view('task::show',compact('task','members','title','duration'));
+        
+        return view('task::show',compact('task','members','title','duration','countComment','user_id'));
     
     })->name('taskManagementTaskShow');
     
@@ -158,6 +259,7 @@ Route::group(['prefix' => 'task-management','middleware' => ['auth']],function()
             $stafs = TaskManagement::staf('create',NULL,NULL);
     
             $opds = $stafs->opds;
+            //$opds = Opd::index();
             $users = $stafs->users;
         
             return view('staf::create',compact('opds','users','title'));
@@ -263,7 +365,6 @@ Route::group(['prefix' => 'task-management','middleware' => ['auth']],function()
     Route::get('/member',function(){
             $title = "Member list";
             $members = TaskManagement::member('index',NULL,NULL);
-        
             return view('member::index',compact('members','title'));
         
     })->name('taskManagementMemberIndex');
@@ -310,7 +411,83 @@ Route::group(['prefix' => 'task-management','middleware' => ['auth']],function()
 
     })->name('taskManagementMemberDestroy');
 
+
+
+    
+    Route::get('/testajax/{val}/{cmid}','TaskManagementController@taskManagementCommentRatingStore')->name('ajaxTest');
+
+
+    Route::get('/t',function(){
+        //dd(Route::getName());
+        if(Request::get('page') == ''){
+            $page = 0;
+        }else{
+            $page = Request::get('page');
+        }
+
+
+
+        $routes = Route::getRoutes();
+        foreach ($routes as $key => $route) {
+            $routez[] = ['url' => url('/').'/'.$route->uri(),'name' => $route->getName()];
+        }
+
+        foreach (array_slice($routez, $page * 10, 10) as $key => $route_display) {
+            if(!empty($route_display['name'])){
+                echo $route_display['name'].' - '.$route_display['url']."<br>";
+            }
+                        
+        }
+        // $col = collect($routez);
+        // dd($col);
+    });
+
+    // access controll
+
+    Route::get('access-control','AccessController@index')->name('accessControlIndex');
+    Route::get('access-control/{route}/show','AccessController@show')->name('accessControlShow');
+    Route::post('access-control/store','AccessController@store')->name('accessControlStore');
+
+    // Advancetrust
+
+    // Role :
+
+
+        Route::get('/role','RoleController@index')->name('role');
+
+        Route::get('/role/create','RoleController@create')->name('role_create');
+
+        Route::post('/role/store','RoleController@store')->name('storeRole');
+
+        Route::get('/role/{id}/delete','RoleController@destroy')->name('role_destroy');
+
+        Route::get('/role/{id}/edit','RoleController@edit')->name('role_edit');
+
+        Route::get('/role/{id}/show','RoleController@show')->name('role_show');
+
+        Route::post('/role/{id}/update','RoleController@update')->name('updateRole');
+
+        Route::get('/role/{id}/add_permission','RoleController@addPermission')->name('role_add_permission');
+
+        Route::post('/role/{id}/store_add_permission','RoleController@storePermission')->name('storeRolePermission');
+
+        // Permission :   
+
+        Route::get('/permission','PermissionController@index')->name('permission');
+
+        Route::get('/permission/create','PermissionController@create')->name('permission_create');
+
+        Route::post('/permission/store','PermissionController@store')->name('storePermission');
+
+        Route::get('/permission/{id}/delete','PermissionController@destroy')->name('permission_destroy');
+
+        Route::get('/permission/{id}/edit','PermissionController@edit')->name('permission_edit');
+
+        Route::get('/permission/{id}/show','PermissionController@show')->name('permission_show');
+
+        Route::post('/permission/{id}/update','PermissionController@update')->name('updatePermission');    
+
     
 });
 
-
+Route::get('{name?}', 'ClearController@showView');

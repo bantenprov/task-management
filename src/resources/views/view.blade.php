@@ -1,1 +1,0 @@
-This is demo view file for Bantenprov\TaskManagement package using blade template

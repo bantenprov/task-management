@@ -111,4 +111,41 @@ class TaskManagementController extends Controller
     {
         return \TaskManagement::member('update',$id,$req->all());
     }
+
+    public function taskManagementOpdStore(Request $req)
+    {
+        $validator = Validator::make($req->all(),[
+            'name'       => 'required',
+            'kunker'     => 'required',
+            'levelunker' => 'required',
+            'njab'       => 'required',
+            'npej'       => 'required'
+        ]);
+
+        if($validator->fails()){
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        \Opd::storeRoot((object)$req->all());
+        return redirect()->back()->with('message','add success');
+    }
+
+    public function taskManagementOpdAddChildStore($id,Request $req)
+    {
+        $validator = Validator::make($req->all(),[
+            'root'         => 'required',
+            'c_name'       => 'required',
+            'c_kunker'     => 'required',
+            'c_levelunker' => 'required',
+            'c_njab'       => 'required',
+            'c_npej'       => 'required'
+        ]);
+
+        if($validator->fails()){
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        \Opd::storeChild((object)$req->all());
+        return redirect()->back()->with('message','add success');
+    }
 }
