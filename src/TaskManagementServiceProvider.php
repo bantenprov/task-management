@@ -121,10 +121,10 @@ class TaskManagementServiceProvider extends ServiceProvider
     {
         $packageViewsPath = __DIR__.'/resources/views';
 
-        //$this->loadViewsFrom($packageViewsPath, 'task-management');
+        $this->loadViewsFrom($packageViewsPath, 'task-management');
 
         $this->publishes([
-            $packageViewsPath => resource_path('views'),
+            $packageViewsPath => resource_path('views/vendor'),
         ], 'tm-views');
     }
 
@@ -176,5 +176,4 @@ class TaskManagementServiceProvider extends ServiceProvider
         
     }
 }
-
 
