@@ -24,7 +24,7 @@
         "bantenprov/project" : "dev-master",
         "bantenprov/staf" : "dev-master",
         "bantenprov/task" : "dev-master",
-        "bantenprov/laravel-opd" : "1.0.0",
+        "bantenprov/laravel-opd" : "1.0.1",
         "laravelcollective/html": "^5.4.0",
         "that0n3guy/transliteration": "2.0.x",
         "snowfire/beautymail": "dev-master"
