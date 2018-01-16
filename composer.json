@@ -36,5 +36,5 @@
             "Bantenprov\\TaskManagement\\": "src"
         }
     },
-    "minimum-stability": "stable"
+    "minimum-stability": "dev"
 }
