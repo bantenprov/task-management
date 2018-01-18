@@ -124,7 +124,7 @@ class TaskManagementServiceProvider extends ServiceProvider
         $this->loadViewsFrom($packageViewsPath, 'task-management');
 
         $this->publishes([
-            $packageViewsPath => resource_path('views/vendor'),
+            $packageViewsPath => resource_path('views'),
         ], 'tm-views');
     }
 
@@ -162,7 +162,7 @@ class TaskManagementServiceProvider extends ServiceProvider
     {                     
 
         $this->publishes([
-            File::put(base_path('app/Http/Controllers/TaskManagementController.php'),File::get(__DIR__.'/stubs/controllers/TaskManagementController.stub'))
+            //File::put(base_path('app/Http/Controllers/TaskManagementController.php'),File::get(__DIR__.'/stubs/controllers/TaskManagementController.stub'))
         ], 'tm-controller');
         
     }
@@ -171,9 +171,10 @@ class TaskManagementServiceProvider extends ServiceProvider
     {                     
 
         $this->publishes([
-            File::put(base_path('routes/web.php'),File::get(__DIR__.'/stubs/route/web.stub'))
+            //File::put(base_path('routes/web.php'),File::get(__DIR__.'/stubs/route/web.stub'))
         ], 'tm-route');
         
     }
 }
+
 
