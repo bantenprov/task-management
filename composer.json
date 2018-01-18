@@ -21,7 +21,8 @@
         "illuminate/support": "5.4.*",        
         "bantenprov/laravel-opd" : "1.0.1",
         "laravelcollective/html": "^5.4.0",
-        "that0n3guy/transliteration": "2.0.x"
+        "that0n3guy/transliteration": "2.0.x",
+        "willvincent/laravel-rateable": "1.0.4"
   },
   "autoload": {
         "files": [
@@ -33,3 +34,4 @@
     },
     "minimum-stability": "dev"
 }
+
