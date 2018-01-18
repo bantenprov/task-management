@@ -1,0 +1,177 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\User;
+use Bantenprov\Task\Models\Task;
+use Bantenprov\Comment\Models\CommentRating;
+use Validator;
+
+
+class UserProfileController extends Controller
+{
+    
+    protected $userModel;
+    protected $taskModel;
+    protected $commentModel;
+    protected $title;
+
+
+    public function __construct()
+    {
+        $this->userModel = new User;
+        $this->taskModel = new Task;
+        $this->commentModel = new CommentRating;
+        $this->title = "User Profile";
+    }
+
+    public function profile()
+    {
+        /* chekc old pass 
+
+            Hash::check($plain_text_old, '$hashes_password_old');
+
+        */
+        
+    }
+
+    public function index()
+    {
+        $comments = $this->userModel->find(\Auth::user()->id)->getComment()->orderBy('created_at','desc')->paginate(10);
+        // $commentRating = $this->userModel->find(\Auth::user()->id)->getRating->sum('rating');
+        $commentRating = $this->commentModel->where('user_id_comment',\Auth::user()->id)->sum('rating');
+        
+        $member = $this->userModel->find(\Auth::user()->id)->getMember;
+        $staf = $this->userModel->find(\Auth::user()->id)->getStaf;        
+        $whoAmI = "";
+        
+        if(is_null($member) && !is_null($staf)){
+            $whoAmI = "Staf";
+            
+        }elseif(is_null($staf) && !is_null($member)){
+            $whoAmI = "Member";
+            
+        }else{
+            $whoAmI = "-";
+        }
+        
+        return view('user_profile',compact('comments','commentRating','whoAmI'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        //
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit()
+    {
+        $title = $this->title;
+        $user = $this->userModel->find(\Auth::user()->id);
+        return view('edit_user',compact('user','title'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request)
+    {        
+        
+        if(empty($request->password))
+        {
+            $validator = Validator::make($request->all(),[
+                'name' => 'required',
+                'email' => 'required|email'
+            ]);
+            
+            if($validator->fails())
+            {
+                return redirect()->back()->withErrors($validator);
+            }
+
+            $this->userModel->find(\Auth::user()->id)->update([
+                'name' => $request->name,
+                'email' => $request->email
+            ]);
+            return redirect()->back()->with('message','Success update user profile');
+        }else{
+            $user = $this->userModel->find(\Auth::user()->id);
+
+            $check_old_passwd = \Hash::check($request->old_password, $user->password);
+
+            if($check_old_passwd)
+            {
+                $validator = Validator::make($request->all(),[
+                    'name' => 'required',
+                    'email' => 'required|email',
+                    'password' => 'required|same:confirm_password'
+                ]);
+                
+                if($validator->fails())
+                {
+                    return redirect()->back()->withErrors($validator);
+                }
+                $this->userModel->find(\Auth::user()->id)->update([
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'password' => bcrypt($request->password)
+                ]);
+                return redirect()->back()->with('message','Success update new password');
+            }else{
+                return redirect()->back()->withErrors('wrong old password');
+            }
+            
+
+            
+        }
+        
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        //
+    }
+}
