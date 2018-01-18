@@ -7,6 +7,7 @@ Task management
 $ composer create-project --prefer-dist laravel/laravel project_name "5.4.*"
 ```
 
+
 ## Install package
 
 ```bash
@@ -18,7 +19,6 @@ $ composer require bantenprov/task-management:dev-master
 Tambahkan `"snowfire/beautymail": "dev-master",` pada composer.json
 ```json
 "require": {
-	"bantenprov/task-management": "dev-master",
         "snowfire/beautymail": "dev-master"
     },
 ```
