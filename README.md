@@ -13,6 +13,16 @@ $ composer create-project --prefer-dist laravel/laravel project_name "5.4.*"
 $ composer require bantenprov/task-management:dev-master
 ```
 
+## Edit Composer.json
+
+Tambahkan `"snowfire/beautymail": "dev-master",` pada composer.json
+```json
+"require": {
+	"bantenprov/task-management": "dev-master",
+        "snowfire/beautymail": "dev-master"
+    },
+```
+
 ## Edit config/app.php
 
 ```php
