@@ -7,6 +7,7 @@ Task management
 $ composer create-project --prefer-dist laravel/laravel project_name "5.4.*"
 ```
 
+
 ## Install package
 
 ```bash
