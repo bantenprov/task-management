@@ -18,7 +18,6 @@ $ composer require bantenprov/task-management:dev-master
 Tambahkan `"snowfire/beautymail": "dev-master",` pada composer.json
 ```json
 "require": {
-	"bantenprov/task-management": "dev-master",
         "snowfire/beautymail": "dev-master"
     },
 ```
