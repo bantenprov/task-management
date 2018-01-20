@@ -75,22 +75,22 @@ class TaskManagementCommand extends Command
     public function pulishAuthStub()
     {                     
 
-        File::put(base_path('app/Controllers/Auth/LoginController.php'),File::get(__DIR__.'/../../stubs/controllers/auth/LoginController.stub'));
-        File::put(base_path('app/Controllers/Auth/RegisterController.php'),File::get(__DIR__.'/../../stubs/controllers/auth/RegisterController.stub'));
+        File::put(base_path('app/Http/Controllers/Auth/LoginController.php'),File::get(__DIR__.'/../../stubs/controllers/auth/LoginController.stub'));
+        File::put(base_path('app/Http/Controllers/Auth/RegisterController.php'),File::get(__DIR__.'/../../stubs/controllers/auth/RegisterController.stub'));
 
     }
 
     public function pulishUserProfileControllerStub()
     {                     
 
-        File::put(base_path('app/Controllers/UserProfileController.php'),File::get(__DIR__.'/../../stubs/controllers/UserProfileController.stub'));
+        File::put(base_path('app/Http/Controllers/UserProfileController.php'),File::get(__DIR__.'/../../stubs/controllers/UserProfileController.stub'));
 
     }
 
     public function pulishUserControllerStub()
     {                     
 
-        File::put(base_path('app/Controllers/UserController.php'),File::get(__DIR__.'/../../stubs/controllers/UserController.stub'));
+        File::put(base_path('app/Http/Controllers/UserController.php'),File::get(__DIR__.'/../../stubs/controllers/UserController.stub'));
 
     }
 
