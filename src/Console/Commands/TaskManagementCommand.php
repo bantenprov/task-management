@@ -1,7 +1,7 @@
 <?php namespace Bantenprov\TaskManagement\Console\Commands;
 
 use Illuminate\Console\Command;
-
+use File;
 /**
  * The TaskManagementCommand class.
  *
@@ -44,6 +44,11 @@ class TaskManagementCommand extends Command
     {
         $this->pulishControllerStub();
         $this->pulishRouteStub();
+        $this->pulishModelStub();
+        $this->pulishAuthStub();
+        $this->pulishUserControllerStub();
+        $this->pulishUserProfileControllerStub();
+        $this->publishKernel();
         $this->info('Success publish install task management');
     }
 
@@ -51,13 +56,46 @@ class TaskManagementCommand extends Command
     public function pulishControllerStub()
     {                     
         
-        File::put(base_path('app/Http/Controllers/TaskManagementController.php'),File::get(__DIR__.'/stubs/controllers/TaskManagementController.stub'));
+        File::put(base_path('app/Http/Controllers/TaskManagementController.php'),File::get(__DIR__.'/../../stubs/controllers/TaskManagementController.stub'));
         
     }
 
     public function pulishRouteStub()
     {                     
 
-        File::put(base_path('routes/web.php'),File::get(__DIR__.'/stubs/route/web.stub'));       
+        File::put(base_path('routes/web.php'),File::get(__DIR__.'/../../stubs/route/web.stub'));       
+    }
+
+    public function pulishModelStub()
+    {                     
+
+        File::put(base_path('app/User.php'),File::get(__DIR__.'/../../stubs/models/User.stub'));       
+    }
+
+    public function pulishAuthStub()
+    {                     
+
+        File::put(base_path('app/Http/Controllers/Auth/LoginController.php'),File::get(__DIR__.'/../../stubs/controllers/auth/LoginController.stub'));
+        File::put(base_path('app/Http/Controllers/Auth/RegisterController.php'),File::get(__DIR__.'/../../stubs/controllers/auth/RegisterController.stub'));
+
+    }
+
+    public function pulishUserProfileControllerStub()
+    {                     
+
+        File::put(base_path('app/Http/Controllers/UserProfileController.php'),File::get(__DIR__.'/../../stubs/controllers/UserProfileController.stub'));
+
+    }
+
+    public function pulishUserControllerStub()
+    {                     
+
+        File::put(base_path('app/Http/Controllers/UserController.php'),File::get(__DIR__.'/../../stubs/controllers/UserController.stub'));
+
+    }
+
+    public function publishKernel()
+    {
+        File::put(base_path('app/Http/Kernel.php'),File::get(__DIR__.'/../../stubs/http/Kernel.stub'));
     }
 }
