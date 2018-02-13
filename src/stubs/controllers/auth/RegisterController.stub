@@ -58,12 +58,10 @@ class RegisterController extends Controller
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data)
-    {       
-        //dd($data);
+    {               
         return Validator::make($data, [
             'name' => 'required|string|max:255',            
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6',
+            'email' => 'required|string|email|max:255|unique:users',            
             'terms' => 'required'
         ]);
         
@@ -77,7 +75,10 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        //dd($data);
+           
+        
+
+
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
@@ -88,37 +89,36 @@ class RegisterController extends Controller
     }
 
     public function register(Request $request)
-    {        
+    {    
+        $link = 'http://192.168.12.11:8900/login';
+        $email = $request->email;
+        $name = $request->name;
+        $password = str_random(10);
+
         if(!env('REGISTRATION')){            
             return redirect()->back();
         }
 
-        $this->validator($request->all())->validate();
-
-        event(new Registered($user = $this->create($request->all())));
-
-        $this->guard()->login($user);
-
-        return $this->registered($request, $user)
-                        ?: redirect($this->redirectPath());
-    }
-
-    // public function register(Request $request)
-    // {
-                    
-
-    //     $this->validator($request->all())->validate();   
+        $this->validator($request->all())->validate();        
         
-    //     //dd($this->validator($request->all())->fails());
+        event(new Registered($user = $this->create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => $password
+        ])));        
+
         
-    //     array_forget($request,'password_confirm');
-    //     array_forget($request,'terms');
+        \Mail::send('emails.verify-email', ['link' => $link, 'email' => $email,'name' => $name, 'password' => $password], function ($message) use ($email)
+        {
 
-    //     event(new Registered($user = $this->create($request->all())));
+            $message->from('verify.account@task-management.local', 'Task Management');
+            $message->subject('Verify account');
+            $message->to($email);
 
-    //     $this->guard()->login($user);
+        });
 
-    //     return $this->registered($request, $user)
-    //                     ?: redirect($this->redirectPath());
-    // }
+        
+        return redirect()->back()->with('message','Check email to get password for login');
+
+    }    
 }
