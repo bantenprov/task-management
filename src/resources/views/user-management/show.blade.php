@@ -27,7 +27,7 @@
 @section('content') 
 
 <div class="col-sm-12 col-md-12">
-    {{-- <div>
+    <div>
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul style="padding:0;">
@@ -44,7 +44,7 @@
             </ul>
         </div>
     @endif
-    </div>  --}}    
+    </div>   
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">
