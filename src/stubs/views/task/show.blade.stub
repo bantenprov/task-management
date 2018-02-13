@@ -414,6 +414,8 @@ pre {
             var onStar = parseInt($(this).data('value'), 10); // The star currently selected
             var stars = $(this).parent().children('li.star');
             //console.log($(this).parent());
+            
+
             for (i = 0; i < stars.length; i++) {
                 $(stars[i]).removeClass('selected');
             }
@@ -423,7 +425,8 @@ pre {
             }
             
             // JUST RESPONSE (Not needed)
-            var ratingValue = parseInt($('#stars li.selected').last().data('value'), 10);
+            //var ratingValue = parseInt($('#stars li.selected').last().data('value'), 10);
+            var ratingValue = $(this).attr('data-value');
             var msg = "";
             if (ratingValue > 1) {
                 msg = "Thanks! You rated this " + ratingValue + " stars.";
@@ -442,6 +445,8 @@ pre {
             var replace_url = url.replace(':id',val);
             var storeUrl = replace_url.replace(':cmid',cmdi);
             console.log(storeUrl);
+            console.log(ratingValue)
+            console.log($(this).attr('data-value'))
             $.ajax({
                 type: "get",
                 url: storeUrl,
